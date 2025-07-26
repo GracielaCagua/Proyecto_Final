@@ -8,6 +8,9 @@ import { Notification } from './notification/entities/notification.entity';
 import { Payment } from './payments/entities/payment.entity';
 import { Product } from './products/entities/product.entity';
 import { Client } from './cliente/entities/cliente.entity';
+import { Order } from './payments/entities/order.entity';
+import { Category } from './products/entities/category';
+import { OrderItem } from './payments/entities/order-item.entity';
 
 @Module({
   imports: [
@@ -16,14 +19,14 @@ import { Client } from './cliente/entities/cliente.entity';
     NotificationModule,
     ProductsModule,
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'postgres',
-      password: '123123',
+      username: 'root',
+      password: '',
       database: 'moda',
-      entities: [Notification, Payment, Product, Client],
-      synchronize: true,
+      entities: [Notification, Payment, Product, Client, Order, Category, OrderItem],
+      // synchronize: true, ////quitar en produccion 
     })
   ],
 

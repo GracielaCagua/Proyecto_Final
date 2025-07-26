@@ -1,34 +1,63 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+// src/payments/payments.controller.ts
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Param,
+  Body,
+  ParseUUIDPipe,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { ProcessPaymentDto } from './dto/process-payment.dto';
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.create(createPaymentDto);
+  async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
+    try {
+      return await this.paymentsService.createPayment(createPaymentDto);
+    } catch (error) {
+      throw new HttpException(
+        error.message,
+        error instanceof NotFoundException
+          ? HttpStatus.NOT_FOUND
+          : HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
-  @Get()
-  findAll() {
-    return this.paymentsService.findAll();
+  @Put('process')
+  async processPayment(@Body() processPaymentDto: ProcessPaymentDto) {
+    try {
+      return await this.paymentsService.processPayment(processPaymentDto);
+    } catch (error) {
+      throw new HttpException(
+        error.message,
+        error instanceof NotFoundException
+          ? HttpStatus.NOT_FOUND
+          : HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.paymentsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentsService.update(+id, updatePaymentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.paymentsService.remove(+id);
+  async getPaymentById(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      return await this.paymentsService.getPaymentById(id);
+    } catch (error) {
+      throw new HttpException(
+        error.message,
+        error instanceof NotFoundException
+          ? HttpStatus.NOT_FOUND
+          : HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

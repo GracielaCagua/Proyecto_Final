@@ -1,34 +1,67 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  ParseUUIDPipe,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  // Product endpoints
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  async createProduct(@Body() createProductDto: CreateProductDto) {
+    return this.productsService.createProduct(createProductDto);
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  async findAllProducts() {
+    return this.productsService.findAllProducts();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  async findProductById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.productsService.findProductById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
+  @Put(':id')
+  async updateProduct(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return this.productsService.updateProduct(id, updateProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeProduct(@Param('id', ParseUUIDPipe) id: string) {
+    return this.productsService.removeProduct(id);
+  }
+
+  // Category endpoints
+  @Post('categories')
+  async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.productsService.createCategory(createCategoryDto);
+  }
+
+  @Get('categories')
+  async findAllCategories() {
+    return this.productsService.findAllCategories();
+  }
+
+  @Get('categories/:id')
+  async findCategoryById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.productsService.findCategoryById(id);
   }
 }

@@ -28,5 +28,5 @@ export class Order {
     status: OrderStatus;
 
     @OneToOne(() => Payment, payment => payment.order, { cascade: true })
-    payment: Payment;
+    payment: Payment[];
 }
