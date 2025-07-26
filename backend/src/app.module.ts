@@ -19,11 +19,11 @@ import { OrderItem } from './payments/entities/order-item.entity';
     NotificationModule,
     ProductsModule,
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
+      port: 5432,
+      username: 'postgres',
+      password: '123123',
       database: 'moda',
       entities: [Notification, Payment, Product, Client, Order, Category, OrderItem],
       // synchronize: true, ////quitar en produccion 
