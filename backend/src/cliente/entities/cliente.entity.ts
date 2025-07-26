@@ -1,14 +1,11 @@
-import { SoporteCliente } from 'src/soporte-cliente/entities/soporte-cliente.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Order } from 'src/payments/entities/order.entity';
 
 @Entity('cliente')
-export class Cliente {
-  @PrimaryGeneratedColumn()
-  id_cliente: number;
-
-  @OneToMany(() => SoporteCliente, (soporte) => soporte.cliente)
-  soporte: SoporteCliente;
+export class Client {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 50 })
   nombre: string;
@@ -27,6 +24,9 @@ export class Cliente {
 
   @Column({ type: 'varchar', length: 100 })
   contraseña: string;
+
+  @OneToMany(() => Order, order => order.client)
+  orders: Order[];
 
   @BeforeInsert()
   async hashPassword() {

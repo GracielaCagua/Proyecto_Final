@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Notification } from './notification/entities/notification.entity';
 import { Payment } from './payments/entities/payment.entity';
 import { Product } from './products/entities/product.entity';
-import { Cliente } from './client/entities/cliente.entity';
+import { Client } from './cliente/entities/cliente.entity';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { Cliente } from './client/entities/cliente.entity';
       username: 'postgres',
       password: '123123',
       database: 'moda',
-      entities: [ Notification, Payment, Product, Cliente ],
+      entities: [Notification, Payment, Product, Client],
       synchronize: true,
     })
   ],
